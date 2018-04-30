@@ -1,17 +1,24 @@
 import com.sun.javafx.PlatformUtil;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 
 public class HotelBookingTest {
 
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver;
+    
 
-    @FindBy(linkText = "Hotels")
-    private WebElement hotelLink;
+/*@FindBy(how = How.ID, using = "flashSaleEl-hotel")
+private WebElement hotelLink;
+*/
+   @FindBy(linkText = "hotels")
+   public WebElement hotelLink;
 
     @FindBy(id = "Tags")
     private WebElement localityTextBox;
@@ -23,13 +30,22 @@ public class HotelBookingTest {
     private WebElement travellerSelection;
 
     @Test
-    public void shouldBeAbleToSearchForHotels() {
+    public void shouldBeAbleToSearchForHotels() throws InterruptedException {
         setDriverPath();
+        
+        driver=new ChromeDriver();
 
         driver.get("https://www.cleartrip.com/");
-        hotelLink.click();
+        //Thread.sleep(2000);
+       			
+        driver.findElement(By.linkText("Hotels")).click();
+       //hotelLink.click();
+        
+        wait(2000);
+        driver.findElement(By.id("Tags")).click();
+        driver.findElement(By.xpath("//*[@id='Tags']")).sendKeys("Indiranagar, Bangalore");
 
-        localityTextBox.sendKeys("Indiranagar, Bangalore");
+       // localityTextBox.sendKeys("Indiranagar, Bangalore");
 
         new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
         searchButton.click();
